@@ -1,0 +1,131 @@
+import React, { useState, useEffect } from 'react';
+import { Search } from 'lucide-react';
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { messageAPI } from '@/services/api';
+import { useDebounce } from '@/hooks/use-debounce';
+
+interface User {
+  id: string;
+  name: string;
+  businessName?: string;
+  email: string;
+  role?: string;
+}
+
+interface NewConversationDialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSelectUser: (user: User) => void;
+  users: User[];
+}
+
+export function NewConversationDialog({
+  isOpen,
+  onClose,
+  onSelectUser,
+  users,
+}: NewConversationDialogProps) {
+  const [searchQuery, setSearchQuery] = useState('');
+  const debouncedQuery = useDebounce(searchQuery, 300);
+  const [remoteUsers, setRemoteUsers] = useState<User[]>(users || []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const fetchUsers = async () => {
+      try {
+        const res = await messageAPI.getAvailableUsers(debouncedQuery);
+        if (!cancelled) setRemoteUsers(res.data || []);
+      } catch (error) {
+        console.error('Failed to fetch users for new conversation:', error);
+      }
+    };
+
+    if (debouncedQuery !== '' || (users && users.length === 0)) {
+      fetchUsers();
+    } else {
+      setRemoteUsers(users || []);
+    }
+
+    return () => {
+      cancelled = true;
+    };
+  }, [debouncedQuery, users]);
+
+  const filteredUsers = remoteUsers.filter(user =>
+    searchQuery
+      ? user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (user.businessName && user.businessName.toLowerCase().includes(searchQuery.toLowerCase()))
+      : true
+  );
+
+  return (
+    <AlertDialog open={isOpen} onOpenChange={onClose}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>New Conversation</AlertDialogTitle>
+          <AlertDialogDescription>
+            Search for a user to start a conversation with.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+
+        <div className="relative mb-4">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="search"
+            placeholder="Search users..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10"
+          />
+        </div>
+
+        <ScrollArea className="h-[300px] pr-4">
+          <div className="space-y-2">
+            {filteredUsers.map((user) => (
+              <Button
+                key={user.id}
+                variant="ghost"
+                className="w-full justify-start p-3 h-auto"
+                onClick={() => {
+                  onSelectUser(user);
+                  onClose();
+                }}
+              >
+                <div className="flex items-center gap-3">
+                  <Avatar>
+                    <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+                  </Avatar>
+                  <div className="text-left">
+                    <p className="font-medium">{user.name}</p>
+                    {user.businessName && (
+                      <p className="text-sm text-muted-foreground">{user.businessName}</p>
+                    )}
+                    <p className="text-xs text-muted-foreground">{user.email}</p>
+                  </div>
+                </div>
+              </Button>
+            ))}
+
+            {filteredUsers.length === 0 && (
+              <div className="text-center py-8 text-muted-foreground">
+                No users found matching "{searchQuery}"
+              </div>
+            )}
+          </div>
+        </ScrollArea>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+}
