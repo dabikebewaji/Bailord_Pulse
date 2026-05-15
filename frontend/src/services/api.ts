@@ -2,9 +2,10 @@ import axios from 'axios';
 import { toast } from 'sonner';
 
 // Base API configuration
-// Use Vite env variable VITE_API_URL in development or fallback to '/api'
-// which makes it easy to use a Vite dev proxy to forward requests to the backend.
-const API_BASE_URL = (import.meta.env.VITE_API_URL as string) || '/api';
+// Always use '/api' which works with:
+// - Vite dev proxy (proxies to local backend at localhost:5000)
+// - Vercel rewrites (proxies to production backend, avoiding CORS issues)
+const API_BASE_URL = '/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,

@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://bailord-pulse-jy3g.vercel.app/:path*"
+    }
+  ]
+}
