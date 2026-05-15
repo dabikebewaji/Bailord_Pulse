@@ -26,7 +26,7 @@ This repository contains the frontend application located in `bailord-pulse-hub-
 ### Install dependencies
 
 ```sh
-cd c:\Users\Dinah Bewaji\Desktop\bailord-pulse-hub-main\bailord-pulse-hub-main
+cd c:\Users\Dinah Bewaji\Desktop\bailord-pulse\frontend
 npm install
 ```
 
