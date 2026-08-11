@@ -92,7 +92,7 @@ export const PlaceOrderDialog = ({ onOrdered }: { onOrdered?: () => void }) => {
                       {outOfStock && <Badge variant="secondary">Out of stock</Badge>}
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      ${Number(product.price).toFixed(2)} · {product.stockQuantity} in stock
+                      ₦{Number(product.price).toFixed(2)} · {product.stockQuantity} in stock
                     </p>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
@@ -125,7 +125,7 @@ export const PlaceOrderDialog = ({ onOrdered }: { onOrdered?: () => void }) => {
         )}
 
         <div className="flex items-center justify-between pt-4 border-t">
-          <span className="font-semibold">Total: ${total.toFixed(2)}</span>
+          <span className="font-semibold">Total: ₦{total.toFixed(2)}</span>
           <Button onClick={handleSubmit} disabled={!cartItems.length || isSubmitting}>
             {isSubmitting ? 'Placing order...' : `Place Order (${cartItems.length} item${cartItems.length === 1 ? '' : 's'})`}
           </Button>

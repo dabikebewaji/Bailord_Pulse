@@ -290,7 +290,7 @@ const Products = () => {
                     </TableCell>
                     <TableCell>{product.sku || "—"}</TableCell>
                     <TableCell>{product.category || "—"}</TableCell>
-                    <TableCell>${Number(product.price).toFixed(2)}</TableCell>
+                    <TableCell>₦{Number(product.price).toFixed(2)}</TableCell>
                     <TableCell>{product.stockQuantity}</TableCell>
                     <TableCell>
                       <Badge

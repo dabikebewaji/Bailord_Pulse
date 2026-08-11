@@ -430,7 +430,7 @@ const RetailerDashboardView = () => {
       <div className="grid gap-4 md:grid-cols-3">
         <MetricCard
           title="Total Sales"
-          value={`$${Number(retailer.metrics?.totalSales ?? 0).toLocaleString()}`}
+          value={`₦${Number(retailer.metrics?.totalSales ?? 0).toLocaleString()}`}
           icon={TrendingUp}
         />
         <MetricCard
@@ -563,10 +563,10 @@ const RetailerDashboardView = () => {
                         </div>
                         <div className="text-muted-foreground shrink-0 text-right">
                           <span className="text-xs">
-                            ${Number(item.unitPrice).toFixed(2)} each
+                            ₦{Number(item.unitPrice).toFixed(2)} each
                           </span>
                           <span className="ml-2 text-foreground font-medium">
-                            $
+                            ₦
                             {(Number(item.unitPrice) * item.quantity).toFixed(
                               2,
                             )}
@@ -580,7 +580,7 @@ const RetailerDashboardView = () => {
                       Order total
                     </span>
                     <span className="font-semibold">
-                      ${Number(order.totalAmount).toFixed(2)}
+                      ₦{Number(order.totalAmount).toFixed(2)}
                     </span>
                   </div>
                 </div>

@@ -130,7 +130,7 @@ const Orders = () => {
                         ))}
                       </div>
                     </TableCell>
-                    <TableCell>${Number(order.totalAmount).toFixed(2)}</TableCell>
+                    <TableCell>₦{Number(order.totalAmount).toFixed(2)}</TableCell>
                     <TableCell className="text-sm text-muted-foreground">
                       {new Date(order.createdAt).toLocaleDateString()}
                     </TableCell>
